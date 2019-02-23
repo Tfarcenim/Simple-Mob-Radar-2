@@ -13,11 +13,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -36,60 +34,73 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
         ModItems.ITEMS.add(this);    }
 
     public static int r = ConfigHandler.range;
-    public int SELECTED_MOB =0;
-    public Class<Entity> SELECTED_MOB_CLASS;
+    public Class<? extends Entity> selected_mob_class;
     public List<Entity> entityList;
     public int saved_mob;
 
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-        if (SELECTED_MOB_CLASS==null){SELECTED_MOB_CLASS = Reference.mob_class.get(SELECTED_MOB);}
+
+        if (selected_mob_class ==null){
+            selected_mob_class = Reference.mob_class.get(0);}
         BlockPos pos = player.getPosition();
         if (player.isSneaking()) {
-            if (world.isRemote) {
-                changeMobTarget();
+            if (!world.isRemote) {
+
+
+
+
+            changeMobTarget(player.getHeldItem(hand));
                 player.getCooldownTracker().setCooldown(this, 5);
-                player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + " " + Reference.mobs.get(SELECTED_MOB)), true);
+                player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + " " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))), true);
                 return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
         } else if (!world.isRemote){player.getCooldownTracker().setCooldown(this, 20);
 
-            entityList = getMobList(world, pos, player);
+            entityList = getMobList(world, pos, player, hand);
             if (entityList != null && entityList.size() > 0) {
-                saved_mob = getClosestMobToPlayer(pos.getX(), pos.getY(), pos.getZ(), entityList, player);
+                saved_mob = getClosestMobToPlayer(pos.getX(), pos.getY(), pos.getZ(), player);
                 if (entityList.get(saved_mob) instanceof EntityLivingBase){
                     ((EntityLivingBase)entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));}
             }
             return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
+
+
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {return 720000;}
 
-    public List<Entity> getMobList(World Worldin, BlockPos pos, EntityPlayer player) {
+    public List<Entity> getMobList(World Worldin, BlockPos pos, EntityPlayer player, EnumHand hand) {
 
         int i = pos.getX();
         int j = pos.getY();
         int k = pos.getZ();
 
-        List<Entity> entities = Worldin.getEntitiesWithinAABB(SELECTED_MOB_CLASS, new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
+        List<Entity> entities = Worldin.getEntitiesWithinAABB(selected_mob_class, new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
         if (entities.size() > 0) {
-            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size()+" "+Reference.mobs.get(SELECTED_MOB)));
+            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size()+" "+Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))));
         } else {
-            player.sendMessage(new TextComponentString(TextFormatting.RED + "No " + Reference.mobs.get(SELECTED_MOB) + " nearby"));
+            player.sendMessage(new TextComponentString(TextFormatting.RED + "No " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " nearby"));
         }
         return entities;
     }
 
-    public void changeMobTarget() {
-        SELECTED_MOB += 1;
-        if (SELECTED_MOB >= Reference.valid.size()) {
-            SELECTED_MOB = 0;
+    public void changeMobTarget(ItemStack stack) {
+        if(stack.getTagCompound()==null){
+            stack.setTagCompound(new NBTTagCompound());
+            stack.getTagCompound().setInteger("mob type", 0);
         }
-        SELECTED_MOB_CLASS = Reference.mob_class.get(SELECTED_MOB);
+        else{int temp = stack.getTagCompound().getInteger("mob type");
+        if ((temp+1)>=Reference.valid.size()){stack.getTagCompound().setInteger("mob type", 0);}
+            else{stack.getTagCompound().setInteger("mob type", temp+1);}
+        }
+
+        selected_mob_class = Reference.mob_class.get(stack.getTagCompound().getInteger("mob type"));
     }
 
-    public int getClosestMobToPlayer(double x, double y, double z, List<Entity> entitylist, EntityPlayer player) {
-        entitylist = entityList;
+    public int getClosestMobToPlayer(double x, double y, double z, EntityPlayer player) {
+        List<Entity> entitylist = entityList;
         int closest_mob = 0;
         double angle;
         int direction;
@@ -147,10 +158,8 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
         player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Elevation Difference: " + round(entitylist.get(closest_mob).posY - y)));
         return closest_mob;
     }
-
     @Override
     public void registerModels() {
         MainClass.proxy.registerItemRenderer(this,0,"inventory");
-
     }
 }
