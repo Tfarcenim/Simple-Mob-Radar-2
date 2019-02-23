@@ -40,7 +40,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
-        if (player.getHeldItem(hand).getTagCompound() == null){writeToNBT(player.getHeldItem(hand).getTagCompound(),player.getHeldItem(hand));}
+        if (player.getHeldItem(hand).getTagCompound() == null){writeToNBT(player.getHeldItem(hand));}
         BlockPos pos = player.getPosition();
         if (player.isSneaking()) {
             if (!world.isRemote) {
@@ -142,7 +142,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
     public void registerModels() {
         MainClass.proxy.registerItemRenderer(this,0,"inventory");
     }
-    public void writeToNBT(NBTTagCompound compound, ItemStack stack){
+    public void writeToNBT(ItemStack stack){
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setInteger("mob type",0);
     }
