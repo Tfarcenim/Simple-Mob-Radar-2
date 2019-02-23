@@ -1,6 +1,7 @@
 package com.tfar.simplemobradar.util;
 
 import com.tfar.simplemobradar.init.ModItems;
+
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;

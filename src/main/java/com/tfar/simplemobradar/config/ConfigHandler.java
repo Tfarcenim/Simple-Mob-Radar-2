@@ -6,5 +6,4 @@ import net.minecraftforge.common.config.Config;
 public class ConfigHandler {
     @Config.Name("Range in Blocks")
     public static int range = 64;
-
 }
