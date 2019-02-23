@@ -53,9 +53,8 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
             entityList = getMobList(world, pos, player, hand);
             if (entityList != null && entityList.size() > 0) {
                 saved_mob = getClosestMobToPlayer(pos.getX(), pos.getY(), pos.getZ(), player);
-                if (entityList.get(saved_mob) instanceof EntityLivingBase){
-                    ((EntityLivingBase)entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));}
-            }
+                ((EntityLivingBase)entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));}
+
             return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
