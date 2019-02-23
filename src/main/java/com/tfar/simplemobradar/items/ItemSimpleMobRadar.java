@@ -41,7 +41,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
     public List<Entity> entityList;
     public int saved_mob;
 
-
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if (SELECTED_MOB_CLASS==null){SELECTED_MOB_CLASS = Reference.mob_class.get(SELECTED_MOB);}
@@ -52,15 +51,13 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
                 player.getCooldownTracker().setCooldown(this, 5);
                 player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + " " + Reference.mobs.get(SELECTED_MOB)), true);
                 return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
-        } else if (world.isRemote){player.getCooldownTracker().setCooldown(this, 20);
+        } else if (!world.isRemote){player.getCooldownTracker().setCooldown(this, 20);
 
             entityList = getMobList(world, pos, player);
-            //Main.logger.info(SELECTED_MOB_CLASS);
             if (entityList != null && entityList.size() > 0) {
                 saved_mob = getClosestMobToPlayer(pos.getX(), pos.getY(), pos.getZ(), entityList, player);
                 if (entityList.get(saved_mob) instanceof EntityLivingBase){
-                System.out.println("glowing");
-                    ((EntityLivingBase)entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 200, 5));}
+                    ((EntityLivingBase)entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));}
             }
             return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
