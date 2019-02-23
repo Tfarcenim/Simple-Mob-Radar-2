@@ -7,7 +7,5 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 public class CommonProxy {  public void postInit(FMLPostInitializationEvent event)
 {
 }public void registerItemRenderer(Item item, int meta, String id){}
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
-    {
-    }
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event){}
 }

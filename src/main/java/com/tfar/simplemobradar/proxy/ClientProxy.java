@@ -22,9 +22,6 @@ public class ClientProxy extends CommonProxy{public void registerItemRenderer(It
     MinecraftForge.EVENT_BUS.register(eventConfigChanged);
 }    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.getModID().equals(Reference.MOD_ID))
-        {
-            MainClass.proxy.onConfigChanged(event);
-        }
+        if (event.getModID().equals(Reference.MOD_ID)){MainClass.proxy.onConfigChanged(event);}
     }
 }

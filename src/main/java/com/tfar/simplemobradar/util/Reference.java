@@ -10,7 +10,7 @@ public class Reference {
 
         public static final String MOD_ID = "simplemobradar";
         public static final String NAME = "Simple Mob Radar";
-        public static final String VERSION = "1.4";
+        public static final String VERSION = "1.5";
         public static final String MC_VERSION = "1.12.2,";
         public static final String CLIENT_PROXY_CLASS = "com.tfar.simplemobradar.proxy.ClientProxy";
         public static final String COMMON_PROXY_CLASS = "com.tfar.simplemobradar.proxy.CommonProxy";

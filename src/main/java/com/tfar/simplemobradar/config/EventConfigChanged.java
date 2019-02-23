@@ -6,8 +6,5 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class EventConfigChanged
 {
     @SubscribeEvent
-
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
-    {
-    }
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {}
 }
