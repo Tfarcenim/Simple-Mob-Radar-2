@@ -34,23 +34,16 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
         ModItems.ITEMS.add(this);    }
 
     public static int r = ConfigHandler.range;
-    public Class<? extends Entity> selected_mob_class;
     public List<Entity> entityList;
     public int saved_mob;
-
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
-        if (selected_mob_class ==null){
-            selected_mob_class = Reference.mob_class.get(0);}
+        if (player.getHeldItem(hand).getTagCompound() == null){writeToNBT(player.getHeldItem(hand).getTagCompound(),player.getHeldItem(hand));}
         BlockPos pos = player.getPosition();
         if (player.isSneaking()) {
             if (!world.isRemote) {
-
-
-
-
             changeMobTarget(player.getHeldItem(hand));
                 player.getCooldownTracker().setCooldown(this, 5);
                 player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + " " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))), true);
@@ -66,8 +59,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
             return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
-
-
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {return 720000;}
 
@@ -77,7 +68,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
         int j = pos.getY();
         int k = pos.getZ();
 
-        List<Entity> entities = Worldin.getEntitiesWithinAABB(selected_mob_class, new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
+        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.mob_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
         if (entities.size() > 0) {
             player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size()+" "+Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))));
         } else {
@@ -85,36 +76,27 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
         }
         return entities;
     }
-
     public void changeMobTarget(ItemStack stack) {
-        if(stack.getTagCompound()==null){
-            stack.setTagCompound(new NBTTagCompound());
-            stack.getTagCompound().setInteger("mob type", 0);
-        }
-        else{int temp = stack.getTagCompound().getInteger("mob type");
+        int temp = stack.getTagCompound().getInteger("mob type");
         if ((temp+1)>=Reference.valid.size()){stack.getTagCompound().setInteger("mob type", 0);}
             else{stack.getTagCompound().setInteger("mob type", temp+1);}
-        }
-
-        selected_mob_class = Reference.mob_class.get(stack.getTagCompound().getInteger("mob type"));
     }
-
     public int getClosestMobToPlayer(double x, double y, double z, EntityPlayer player) {
-        List<Entity> entitylist = entityList;
+        List<Entity> entities = entityList;
         int closest_mob = 0;
         double angle;
         int direction;
         String compass = "NORTH";
         double distance;
         double closest = 2000000000;
-        for (int i = 0; i < entitylist.size(); i++) {
-            distance = Math.sqrt(Math.pow(entitylist.get(i).posX - x, 2) + Math.pow(entitylist.get(i).posY - y, 2) + Math.pow(entitylist.get(i).posZ - z, 2));
+        for (int i = 0; i < entities.size(); i++) {
+            distance = Math.sqrt(Math.pow(entities.get(i).posX - x, 2) + Math.pow(entities.get(i).posY - y, 2) + Math.pow(entities.get(i).posZ - z, 2));
             if (distance < closest) {
                 closest = distance;
                 closest_mob = i;
             }
         }
-        angle = (Math.atan2(x - entitylist.get(closest_mob).posX, entitylist.get(closest_mob).posZ - z) * 180 / Math.PI) + 180;
+        angle = (Math.atan2(x - entities.get(closest_mob).posX, entities.get(closest_mob).posZ - z) * 180 / Math.PI) + 180;
         direction = (int) (Math.floor(angle / 45 + .5));
         switch (direction) {
             case 6: {
@@ -155,11 +137,15 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
             }
         }
         player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest is " + round(closest) + " blocks away in the " + compass + " direction"));
-        player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Elevation Difference: " + round(entitylist.get(closest_mob).posY - y)));
+        player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Elevation Difference: " + round(entities.get(closest_mob).posY - y)));
         return closest_mob;
     }
     @Override
     public void registerModels() {
         MainClass.proxy.registerItemRenderer(this,0,"inventory");
+    }
+    public void writeToNBT(NBTTagCompound compound, ItemStack stack){
+        stack.setTagCompound(new NBTTagCompound());
+        stack.getTagCompound().setInteger("mob type",0);
     }
 }
