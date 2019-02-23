@@ -52,7 +52,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
                 player.getCooldownTracker().setCooldown(this, 5);
                 player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + " " + Reference.mobs.get(SELECTED_MOB)), true);
                 return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
-        } else if (world.isRemote){{player.getCooldownTracker().setCooldown(this, 20);
+        } else if (world.isRemote){player.getCooldownTracker().setCooldown(this, 20);
 
             entityList = getMobList(world, pos, player);
             //Main.logger.info(SELECTED_MOB_CLASS);
@@ -62,14 +62,11 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
                 System.out.println("glowing");
                     ((EntityLivingBase)entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 200, 5));}
             }
-            return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}}
+            return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {return 720000;}
-
-
-
 
     public List<Entity> getMobList(World Worldin, BlockPos pos, EntityPlayer player) {
 
@@ -109,7 +106,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
                 closest_mob = i;
             }
         }
-
         angle = (Math.atan2(x - entitylist.get(closest_mob).posX, entitylist.get(closest_mob).posZ - z) * 180 / Math.PI) + 180;
         direction = (int) (Math.floor(angle / 45 + .5));
         switch (direction) {
