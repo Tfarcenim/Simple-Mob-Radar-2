@@ -5,7 +5,6 @@ import com.tfar.simplemobradar.config.ConfigHandler;
 import com.tfar.simplemobradar.init.ModItems;
 import com.tfar.simplemobradar.util.IHasModel;
 import com.tfar.simplemobradar.util.Reference;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,7 +14,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -28,14 +30,14 @@ import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_ELEVATION;
 import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_TOTAL_MOBS;
 import static java.lang.Math.round;
 
-public class ItemSimpleMobRadar extends Item implements IHasModel{
-    public ItemSimpleMobRadar(String name) {
+public class ItemSimplePassiveRadar extends Item implements IHasModel{
+    public ItemSimplePassiveRadar(String name) {
         this.setTranslationKey(name);
         this.setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
         this.setCreativeTab(CreativeTabs.MISC);
         ModItems.ITEMS.add(this);    }
 
-    private static int r = ConfigHandler.RANGE_MOBS;
+    public static int r = ConfigHandler.RANGE_ANIMALS;
     private List<Entity> entityList;
     private int saved_mob;
 
@@ -48,7 +50,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
             if (!world.isRemote) {
             changeMobTarget(player.getHeldItem(hand));
                 player.getCooldownTracker().setCooldown(this, 5);
-                player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + " " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))), true);
+                player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + " " + Reference.animals.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))), true);
                 return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
         } else if (!world.isRemote){player.getCooldownTracker().setCooldown(this, 20);
 
@@ -69,18 +71,18 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
         int j = pos.getY();
         int k = pos.getZ();
 
-        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.mob_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
+        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.animal_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
         if (entities.size() > 0) {if (DISPLAY_TOTAL_MOBS) {
-            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size() + " " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))));
+            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size() + " " + Reference.animals.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))));
         }
         } else {
-            player.sendMessage(new TextComponentString(TextFormatting.RED + "No " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " found"));
+            player.sendMessage(new TextComponentString(TextFormatting.RED + "No " + Reference.animals.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " found"));
         }
         return entities;
     }
     public void changeMobTarget(ItemStack stack) {
         int temp = stack.getTagCompound().getInteger("mob type");
-        if ((temp+1)>=Reference.valid_mobs.size()){stack.getTagCompound().setInteger("mob type", 0);}
+        if ((temp+1)>=Reference.valid_animals.size()){stack.getTagCompound().setInteger("mob type", 0);}
             else{stack.getTagCompound().setInteger("mob type", temp+1);}
     }
     public int getClosestMobToPlayer(double x, double y, double z, EntityPlayer player, EnumHand hand) {
@@ -138,7 +140,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
             }
         }
         if (DISPLAY_TOTAL_MOBS)player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest is " + round(closest) + " blocks away in the " + compass + " direction"));
-        else player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest "+ Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))+" is " + round(closest) + " blocks away in the " + compass + " direction"));
+        else player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest "+ Reference.animals.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))+" is " + round(closest) + " blocks away in the " + compass + " direction"));
 
         if (DISPLAY_ELEVATION)player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Elevation Difference: " + round(entities.get(closest_mob).posY - y)));
         return closest_mob;
