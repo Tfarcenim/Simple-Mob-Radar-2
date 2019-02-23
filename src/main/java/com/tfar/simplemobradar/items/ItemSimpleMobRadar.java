@@ -84,9 +84,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
     public int getClosestMobToPlayer(double x, double y, double z, EntityPlayer player) {
         List<Entity> entities = entityList;
         int closest_mob = 0;
-        double angle;
         int direction;
-        String compass = "NORTH";
         double distance;
         double closest = 2000000000;
         for (int i = 0; i < entities.size(); i++) {
@@ -96,8 +94,9 @@ public class ItemSimpleMobRadar extends Item implements IHasModel{
                 closest_mob = i;
             }
         }
-        angle = (Math.atan2(x - entities.get(closest_mob).posX, entities.get(closest_mob).posZ - z) * 180 / Math.PI) + 180;
+        double angle = (Math.atan2(x - entities.get(closest_mob).posX, entities.get(closest_mob).posZ - z) * 180 / Math.PI) + 180;
         direction = (int) (Math.floor(angle / 45 + .5));
+        String compass = "NORTH";
         switch (direction) {
             case 6: {
                 compass = "WEST";
