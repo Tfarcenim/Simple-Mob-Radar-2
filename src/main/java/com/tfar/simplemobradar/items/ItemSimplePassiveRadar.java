@@ -37,7 +37,7 @@ public class ItemSimplePassiveRadar extends Item implements IHasModel{
         this.setCreativeTab(CreativeTabs.MISC);
         ModItems.ITEMS.add(this);    }
 
-    public static int r = ConfigHandler.RANGE_ANIMALS;
+    private static int r = ConfigHandler.RANGE_ANIMALS;
     private List<Entity> entityList;
     private int saved_mob;
 
