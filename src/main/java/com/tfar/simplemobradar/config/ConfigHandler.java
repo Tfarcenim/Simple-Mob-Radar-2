@@ -10,10 +10,10 @@ public class ConfigHandler {
     @Config.Name("Range of passive radar in blocks")
     public static int RANGE_ANIMALS = 150;
     @Config.Name("Display total nearby mobs?")
-    public static boolean DISPLAY_TOTAL_MOBS = true;
+    public static boolean DISPLAY_TOTAL_MOBS = false;
     @Config.Name("Display elevation difference?")
-    public static boolean DISPLAY_ELEVATION = true;
+    public static boolean DISPLAY_ELEVATION = false;
     @Config.Name("Display mob distance?")
-    public static boolean DISPLAY_DISTANCE = true;
+    public static boolean DISPLAY_DISTANCE = false;
 }
 

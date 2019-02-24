@@ -37,7 +37,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
 
     private static int r = ConfigHandler.RANGE_MOBS;
     private List<Entity> entityList;
-    private int saved_mob;
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
@@ -58,7 +57,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
 
             entityList = getMobList(world, pos, player, hand);
             if (entityList != null && entityList.size() > 0) {
-                saved_mob = getClosestMobToPlayer(pos.getX(), pos.getY(), pos.getZ(), player, hand);
+                int saved_mob = getClosestMobToPlayer(pos.getX(), pos.getY(), pos.getZ(), player, hand);
                 ((EntityLivingBase) entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));
             }
 
@@ -74,17 +73,17 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
 
     public List<Entity> getMobList(World Worldin, BlockPos pos, EntityPlayer player, EnumHand hand) {
 
-        int i = pos.getX();
-        int j = pos.getY();
-        int k = pos.getZ();
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
 
-        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.mob_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
+        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.mob_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(x - r, y - r, z - r, x + r, y + r, z + r));
         if (entities.size() > 0) {
             if (DISPLAY_TOTAL_MOBS) {
-                player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size() + " " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))));
+                player.sendStatusMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size() + " " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))),true);
             }
         } else {
-            player.sendMessage(new TextComponentString(TextFormatting.RED + "No " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " found"));
+            player.sendStatusMessage((new TextComponentString(TextFormatting.RED + "No " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " found")),true);
         }
         return entities;
     }
@@ -156,6 +155,8 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
             player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest is " + round(closest) + " blocks away in the " + compass + " direction"));
         else if (DISPLAY_DISTANCE)
             player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " is " + round(closest) + " blocks away in the " + compass + " direction"));
+        else
+            player.sendStatusMessage(new TextComponentString(TextFormatting.AQUA + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " found"),true);
         if (DISPLAY_ELEVATION)
             player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Elevation Difference: " + round(entities.get(closest_mob).posY - y)));
         return closest_mob;
