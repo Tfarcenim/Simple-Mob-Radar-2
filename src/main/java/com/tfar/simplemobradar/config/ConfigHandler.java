@@ -13,5 +13,7 @@ public class ConfigHandler {
     public static boolean DISPLAY_TOTAL_MOBS = true;
     @Config.Name("Display elevation difference?")
     public static boolean DISPLAY_ELEVATION = true;
+    @Config.Name("Display mob distance?")
+    public static boolean DISPLAY_DISTANCE = true;
 }
 
