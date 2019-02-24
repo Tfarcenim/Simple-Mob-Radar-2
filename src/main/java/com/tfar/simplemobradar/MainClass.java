@@ -32,16 +32,14 @@ public class MainClass {
             Reference.mob_class.add(mob.getEntityClass());
         }
         for (EntityEntry mob : Reference.valid_mobs) {
-            Reference.mobs.add(mob.getRegistryName().toString());}
+            Reference.mobs.add(mob.getName());}
         //add passives
             for (EntityEntry e : ForgeRegistries.ENTITIES)
                 if (EntityAnimal.class.isAssignableFrom(e.getEntityClass())) {Reference.valid_animals.add(e);}
             for (EntityEntry mob : Reference.valid_animals) {
                 Reference.animal_class.add(mob.getEntityClass());
             }
-            for (EntityEntry mob : Reference.valid_animals) {
-                Reference.animals.add(mob.getRegistryName().toString());
-            }
+            for (EntityEntry mob : Reference.valid_animals) {Reference.animals.add(mob.getName());}
 
         }
     }
