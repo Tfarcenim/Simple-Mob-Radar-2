@@ -23,7 +23,9 @@ public class ClientEventHandler {
         if (event.phase == TickEvent.Phase.END && mc.player != null && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo && (mc.currentScreen == null || (ConfigHandler.DISPLAY_WITH_CHAT_OPEN && mc.currentScreen instanceof GuiChat))) {
             final EntityPlayer player = mc.player;
             final ItemStack stack = ItemUtils.getHeldRadar(player);
+
             if (stack.getItem() instanceof ItemSimpleMobRadar) {
+                if (stack.getTagCompound() == null) ItemSimpleMobRadar.writeToNBT(stack);
                 final ItemSimpleMobRadar radar = (ItemSimpleMobRadar) stack.getItem();
 
 

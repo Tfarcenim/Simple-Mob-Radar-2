@@ -114,7 +114,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         MainClass.proxy.registerItemRenderer(this, 0, "inventory");
     }
 
-    public void writeToNBT(ItemStack stack) {
+    public static void writeToNBT(ItemStack stack) {
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setInteger("mob type", 0);
         stack.getTagCompound().setInteger("State", 2);
