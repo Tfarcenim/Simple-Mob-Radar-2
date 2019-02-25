@@ -46,6 +46,9 @@ public class ClientEventHandler {
 
                         RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.distance"), 5, 0, 0xFFFFFF, 6);
                         RenderUtils.drawLineOffsetStringOnHUD(""+ItemUtils.getDistance(player,stack), 5, 0, 0xFFFF00, 7);
+
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.totalfound"), 5, 0, 0xFFFFFF, 9);
+                        RenderUtils.drawLineOffsetStringOnHUD(""+ItemUtils.getTotal(stack), 5, 0, 0x00FFFF, 10);
                         break;
                     }
                     case 2: {

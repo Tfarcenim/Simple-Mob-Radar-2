@@ -30,4 +30,7 @@ public class ItemUtils {
     public static int getDistance(EntityPlayer player, ItemStack stack){
         return (int)player.getDistance( stack.getTagCompound().getDouble("X position"), stack.getTagCompound().getDouble("Y position"),  stack.getTagCompound().getDouble("Z position"));
     }
+    public static int getTotal(ItemStack stack){
+        return  stack.getTagCompound().getInteger("Size");
+    }
 }

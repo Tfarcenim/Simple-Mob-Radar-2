@@ -5,7 +5,6 @@ import com.tfar.simplemobradar.config.ConfigHandler;
 import com.tfar.simplemobradar.init.ModItems;
 import com.tfar.simplemobradar.util.IHasModel;
 import com.tfar.simplemobradar.util.Reference;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,17 +14,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.util.List;
-
-import static com.tfar.simplemobradar.config.ConfigHandler.*;
-import static java.lang.Math.round;
 
 public class ItemSimpleMobRadar extends Item implements IHasModel {
     public ItemSimpleMobRadar(String name) {
@@ -55,10 +52,11 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
             player.getCooldownTracker().setCooldown(this, 20);
 
             entityList = getMobList(world, pos, player, hand);
+            player.getHeldItem(hand).getTagCompound().setInteger("Size", entityList.size());
             if (entityList != null && entityList.size() > 0) {
                 player.getHeldItem(hand).getTagCompound().setInteger("State", 1);
-                int saved_mob = getClosestMobs(pos.getX(), pos.getY(), pos.getZ(), player, hand);
-                ((EntityLivingBase) entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));
+                getClosestMobs(player, hand);
+                //((EntityLivingBase) entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));
             } else {
                 player.getHeldItem(hand).getTagCompound().setInteger("State", 0);
             }
@@ -75,17 +73,11 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
 
     public List<Entity> getMobList(World Worldin, BlockPos pos, EntityPlayer player, EnumHand hand) {
 
-        int i = pos.getX();
-        int j = pos.getY();
-        int k = pos.getZ();
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
 
-        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.mob_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
-        if (entities.size() > 0) {
-            if (DISPLAY_TOTAL_MOBS) {
-                player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size() + " " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))));
-            }
-        }
-        return entities;
+        return Worldin.getEntitiesWithinAABB(Reference.mob_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(x - r, y - r, z - r, x + r, y + r, z + r));
     }
 
     public void changeTargetMob(ItemStack stack) {
@@ -98,13 +90,14 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         }
     }
 
-    public int getClosestMobs(double x, double y, double z, EntityPlayer player, EnumHand hand) {
+    public void getClosestMobs(EntityPlayer player, EnumHand hand) {
         List<Entity> entities = entityList;
         int closest_mob = 0;
         double distance;
         double closest = 2000000000;
         for (int i = 0; i < entities.size(); i++) {
-            distance = player.getDistance(entities.get(i).posX,entities.get(i).posY,entities.get(i).posZ);
+            ((EntityLivingBase) entityList.get(i)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));
+            distance = player.getDistance(entities.get(i).posX, entities.get(i).posY, entities.get(i).posZ);
             if (distance < closest) {
                 closest = distance;
                 closest_mob = i;
@@ -114,7 +107,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         player.getHeldItem(hand).getTagCompound().setDouble("X position", entities.get(closest_mob).posX);
         player.getHeldItem(hand).getTagCompound().setDouble("Y position", entities.get(closest_mob).posY);
         player.getHeldItem(hand).getTagCompound().setDouble("Z position", entities.get(closest_mob).posZ);
-        return closest_mob;
     }
 
     @Override
@@ -126,14 +118,9 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setInteger("mob type", 0);
         stack.getTagCompound().setInteger("State", 2);
-
     }
 
     public int getState(ItemStack stack) {
-        if (/*ItemUtils.verifyNBT(stack)*/ true) {
-            return stack.getTagCompound().getInteger("State");
-        }
-
-        return 0;
+        return stack.getTagCompound().getInteger("State");
     }
 }
