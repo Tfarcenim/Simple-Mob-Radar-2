@@ -102,11 +102,10 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
     public int getClosestMobs(double x, double y, double z, EntityPlayer player, EnumHand hand) {
         List<Entity> entities = entityList;
         int closest_mob = 0;
-        int direction;
         double distance;
         double closest = 2000000000;
         for (int i = 0; i < entities.size(); i++) {
-            distance = Math.sqrt(Math.pow(entities.get(i).posX - x, 2) + Math.pow(entities.get(i).posY - y, 2) + Math.pow(entities.get(i).posZ - z, 2));
+            distance = player.getDistance(entities.get(i).posX,entities.get(i).posY,entities.get(i).posZ);
             if (distance < closest) {
                 closest = distance;
                 closest_mob = i;
@@ -116,52 +115,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         player.getHeldItem(hand).getTagCompound().setDouble("X position", entities.get(closest_mob).posX);
         player.getHeldItem(hand).getTagCompound().setDouble("Y position", entities.get(closest_mob).posY);
         player.getHeldItem(hand).getTagCompound().setDouble("Z position", entities.get(closest_mob).posZ);
-
-        double angle = (Math.atan2(x - entities.get(closest_mob).posX, entities.get(closest_mob).posZ - z) * 180 / Math.PI) + 180;
-        direction = (int) (Math.floor(angle / 45 + .5));
-        String compass = "NORTH";
-        switch (direction) {
-            case 6: {
-                compass = "WEST";
-                break;
-            }
-            case 7: {
-                compass = "NORTH-WEST";
-                break;
-            }
-            case 8: {
-                compass = "NORTH";
-                break;
-            }
-            case 0: {
-                compass = "NORTH";
-                break;
-            }
-            case 1: {
-                compass = "NORTH-EAST";
-                break;
-            }
-            case 2: {
-                compass = "EAST";
-                break;
-            }
-            case 3: {
-                compass = "SOUTH-EAST";
-                break;
-            }
-            case 4: {
-                compass = "SOUTH";
-                break;
-            }
-            case 5: {
-                compass = "SOUTH-WEST";
-                break;
-            }
-        }
-        if (DISPLAY_TOTAL_MOBS)
-            player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest is " + round(closest) + " blocks away in the " + compass + " direction"));
-        else if (DISPLAY_DISTANCE)
-            player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest " + Reference.mobs.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " is " + round(closest) + " blocks away in the " + compass + " direction"));
 
         if (DISPLAY_ELEVATION)
             player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Elevation Difference: " + round(entities.get(closest_mob).posY - y)));
