@@ -53,7 +53,7 @@ public class ClientEventHandler {
                         RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.status"), 5, 0, 0xFFFFFF, 0);
                         RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.notfound"), 5, 0, 0xFF0000, 1);
 
-                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0x00FF00, 3);
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0xFFFFFF, 3);
                         RenderUtils.drawLineOffsetStringOnHUD(ItemUtils.getMobName(stack), 5, 0, 0xFFFF00, 4);
                         break;
                     }
@@ -66,7 +66,7 @@ public class ClientEventHandler {
 
                         if (DISPLAY_DISTANCE) {
                             RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.distance"), 5, 0, 0xFFFFFF, 6);
-                            RenderUtils.drawLineOffsetStringOnHUD("" + ItemUtils.getDistance(player, stack), 5, 0, 0xFFFF00, 7);
+                            RenderUtils.drawLineOffsetStringOnHUD("" + ItemUtils.getDistance(player, stack), 5, 0, 0x00FFFF, 7);
                         }
 
                         if (DISPLAY_TOTAL_MOBS) {
@@ -77,7 +77,7 @@ public class ClientEventHandler {
                     }
                     case 2: {
                         RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.status"), 5, 0, 0xFFFFFF, 0);
-                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.inactive"), 5, 0, 0xBBBBBB, 1);
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.inactive"), 5, 0, 0xAAAAAA, 1);
 
                         RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0xFFFFFF, 3);
                         RenderUtils.drawLineOffsetStringOnHUD(ItemUtils.getMobName(stack), 5, 0, 0xFFFF00, 4);
@@ -96,7 +96,7 @@ public class ClientEventHandler {
                         RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.status"), 5, 0, 0xFFFFFF, 0);
                         RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.notfound"), 5, 0, 0xFF0000, 1);
 
-                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0x00FF00, 3);
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0xFFFFFF, 3);
                         RenderUtils.drawLineOffsetStringOnHUD(ItemUtils.getPassiveName(stack), 5, 0, 0xFFFF00, 4);
                         break;
                     }
@@ -109,7 +109,7 @@ public class ClientEventHandler {
 
                         if (DISPLAY_DISTANCE) {
                             RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.distance"), 5, 0, 0xFFFFFF, 6);
-                            RenderUtils.drawLineOffsetStringOnHUD("" + ItemUtils.getDistance(player, stack), 5, 0, 0xFFFF00, 7);
+                            RenderUtils.drawLineOffsetStringOnHUD("" + ItemUtils.getDistance(player, stack), 5, 0, 0x00FFFF, 7);
                         }
 
                         if (DISPLAY_TOTAL_MOBS) {

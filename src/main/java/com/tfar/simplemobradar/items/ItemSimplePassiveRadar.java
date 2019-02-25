@@ -64,7 +64,7 @@ public class ItemSimplePassiveRadar extends Item implements IHasModel {
         int y = pos.getY();
         int z = pos.getZ();
 
-        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.animal_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(x - r, y - r, z - r, x + r, y + r, z + r));
+        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.animal_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mobtype")), new AxisAlignedBB(x - r, y - r, z - r, x + r, y + r, z + r));
         if (entities.size() == 0) return 0;
         int closest_mob = 0;
         double distance;
@@ -90,7 +90,7 @@ public class ItemSimplePassiveRadar extends Item implements IHasModel {
 
     public static void writeToNBT(ItemStack stack) {
         stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setInteger("mob type", 0);
+        stack.getTagCompound().setInteger("mobtype", 0);
         stack.getTagCompound().setInteger("State", 2);
         stack.getTagCompound().setInteger("Size", 0);
     }

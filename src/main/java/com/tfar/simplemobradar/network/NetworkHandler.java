@@ -38,24 +38,24 @@ public class NetworkHandler implements IMessage {
 
                 ItemStack stack = ctx.getServerHandler().player.getHeldItemMainhand();
                 if (stack.getItem() instanceof ItemSimpleMobRadar) {
-                    int type = stack.getTagCompound().getInteger("mob type");
+                    if (stack.getTagCompound()==null) ItemSimpleMobRadar.writeToNBT(stack);
+                        int type = stack.getTagCompound().getInteger("mobtype");
                     stack.getTagCompound().setInteger("State", 2);
-                    stack.getTagCompound().setInteger("mob type",MathHelper.clamp(type + (message.increment ? -1 : 1), 0, Reference.mobs.size()-1));
-
-                        if (stack.getTagCompound().getInteger("mob type") == 0)
-                            stack.getTagCompound().setInteger("mob type",Reference.mobs.size()-1);
-                        else if (stack.getTagCompound().getInteger("mob type") >= Reference.mobs.size()-1)
-                            stack.getTagCompound().setInteger("mob type",0);
+                    stack.getTagCompound().setInteger("mobtype",MathHelper.clamp(type + (message.increment ? -1 : 1), 0, Reference.mobs.size()-1));
+                        if (stack.getTagCompound().getInteger("mobtype") == 0)
+                            stack.getTagCompound().setInteger("mobtype",Reference.mobs.size()-1);
+                        else if (stack.getTagCompound().getInteger("mobtype") == Reference.mobs.size()-1)
+                            stack.getTagCompound().setInteger("mobtype",0);
                 }
                 if (stack.getItem() instanceof ItemSimplePassiveRadar) {
-                    int type = stack.getTagCompound().getInteger("mob type");
+                    if (stack.getTagCompound()==null) ItemSimplePassiveRadar.writeToNBT(stack);
+                    int type = stack.getTagCompound().getInteger("mobtype");
                     stack.getTagCompound().setInteger("State", 2);
-                    stack.getTagCompound().setInteger("mob type",MathHelper.clamp(type + (message.increment ? -1 : 1), 0, Reference.animals.size()-1));
-
-                    if (stack.getTagCompound().getInteger("mob type") == 0)
-                        stack.getTagCompound().setInteger("mob type",Reference.animals.size()-1);
-                    else if (stack.getTagCompound().getInteger("mob type") >= Reference.animals.size()-1)
-                        stack.getTagCompound().setInteger("mob type",0);
+                    stack.getTagCompound().setInteger("mobtype",MathHelper.clamp(type + (message.increment ? -1 : 1), 0, Reference.animals.size()-1));
+                    if (stack.getTagCompound().getInteger("mobtype") == 0)
+                        stack.getTagCompound().setInteger("mobtype",Reference.animals.size()-1);
+                    else if (stack.getTagCompound().getInteger("mobtype") == Reference.animals.size()-1)
+                        stack.getTagCompound().setInteger("mobtype",0);
                 }
             });
             return null;
