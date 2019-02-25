@@ -4,6 +4,7 @@ import com.tfar.simplemobradar.network.NetworkHandler;
 import com.tfar.simplemobradar.proxy.CommonProxy;
 import com.tfar.simplemobradar.util.Reference;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +29,6 @@ public class MainClass {
     public static Logger logger = LogManager.getLogger("simplemobradar");
     public static final SimpleNetworkWrapper NETWORK_WRAPPER = new SimpleNetworkWrapper(Reference.MOD_ID);
 
-
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.registerEvents();
@@ -44,6 +44,7 @@ public class MainClass {
         for (EntityEntry mob : Reference.valid_mobs) {
             Reference.mob_class.add(mob.getEntityClass());
         }
+
         for (EntityEntry mob : Reference.valid_mobs) {
             Reference.mobs.add(mob.getName());}
         //add passives
@@ -53,7 +54,6 @@ public class MainClass {
                 Reference.animal_class.add(mob.getEntityClass());
             }
             for (EntityEntry mob : Reference.valid_animals) {Reference.animals.add(mob.getName());}
-
         }
     }
 

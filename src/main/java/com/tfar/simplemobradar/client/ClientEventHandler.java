@@ -3,10 +3,12 @@ package com.tfar.simplemobradar.client;
 import com.tfar.simplemobradar.MainClass;
 import com.tfar.simplemobradar.config.ConfigHandler;
 import com.tfar.simplemobradar.items.ItemSimpleMobRadar;
+import com.tfar.simplemobradar.items.ItemSimplePassiveRadar;
 import com.tfar.simplemobradar.network.NetworkHandler;
 import com.tfar.simplemobradar.util.ItemUtils;
 import com.tfar.simplemobradar.util.Reference;
 import com.tfar.simplemobradar.util.RenderUtils;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.resources.I18n;
@@ -22,11 +24,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
 import org.lwjgl.input.Keyboard;
 
+import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_DISTANCE;
 import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_TOTAL_MOBS;
 
-//import tehnut.xtones.block.item.ItemBlockXtone;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Reference.MOD_ID)
 
 public class ClientEventHandler {
@@ -43,7 +46,6 @@ public class ClientEventHandler {
             if (stack.getItem() instanceof ItemSimpleMobRadar) {
                 if (stack.getTagCompound() == null) ItemSimpleMobRadar.writeToNBT(stack);
                 final ItemSimpleMobRadar radar = (ItemSimpleMobRadar) stack.getItem();
-
 
                 switch (radar.getState(stack)) {
 
@@ -62,11 +64,15 @@ public class ClientEventHandler {
                         RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0xFFFFFF, 3);
                         RenderUtils.drawLineOffsetStringOnHUD(ItemUtils.getMobName(stack), 5, 0, 0xFFFF00, 4);
 
-                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.distance"), 5, 0, 0xFFFFFF, 6);
-                        RenderUtils.drawLineOffsetStringOnHUD(""+ItemUtils.getDistance(player,stack), 5, 0, 0xFFFF00, 7);
+                        if (DISPLAY_DISTANCE) {
+                            RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.distance"), 5, 0, 0xFFFFFF, 6);
+                            RenderUtils.drawLineOffsetStringOnHUD("" + ItemUtils.getDistance(player, stack), 5, 0, 0xFFFF00, 7);
+                        }
 
-                        if (DISPLAY_TOTAL_MOBS){RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.totalfound"), 5, 0, 0xFFFFFF, 9);
-                        RenderUtils.drawLineOffsetStringOnHUD(""+ItemUtils.getTotal(stack), 5, 0, 0x00FFFF, 10);}
+                        if (DISPLAY_TOTAL_MOBS) {
+                            RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.totalfound"), 5, 0, 0xFFFFFF, 9);
+                            RenderUtils.drawLineOffsetStringOnHUD("" + ItemUtils.getTotal(stack), 5, 0, 0x00FFFF, 10);
+                        }
                         break;
                     }
                     case 2: {
@@ -79,21 +85,64 @@ public class ClientEventHandler {
                     }
                 }
             }
+
+            if (stack.getItem() instanceof ItemSimplePassiveRadar) {
+                if (stack.getTagCompound() == null) ItemSimplePassiveRadar.writeToNBT(stack);
+                final ItemSimplePassiveRadar radar = (ItemSimplePassiveRadar) stack.getItem();
+
+                switch (radar.getState(stack)) {
+
+                    case 0: {
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.status"), 5, 0, 0xFFFFFF, 0);
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.notfound"), 5, 0, 0xFF0000, 1);
+
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0x00FF00, 3);
+                        RenderUtils.drawLineOffsetStringOnHUD(ItemUtils.getPassiveName(stack), 5, 0, 0xFFFF00, 4);
+                        break;
+                    }
+                    case 1: {
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.status"), 5, 0, 0xFFFFFF, 0);
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.found"), 5, 0, 0x00FF00, 1);
+
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0xFFFFFF, 3);
+                        RenderUtils.drawLineOffsetStringOnHUD(ItemUtils.getPassiveName(stack), 5, 0, 0xFFFF00, 4);
+
+                        if (DISPLAY_DISTANCE) {
+                            RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.distance"), 5, 0, 0xFFFFFF, 6);
+                            RenderUtils.drawLineOffsetStringOnHUD("" + ItemUtils.getDistance(player, stack), 5, 0, 0xFFFF00, 7);
+                        }
+
+                        if (DISPLAY_TOTAL_MOBS) {
+                            RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.totalfound"), 5, 0, 0xFFFFFF, 9);
+                            RenderUtils.drawLineOffsetStringOnHUD("" + ItemUtils.getTotal(stack), 5, 0, 0x00FFFF, 10);
+                        }
+                        break;
+                    }
+                    case 2: {
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.status"), 5, 0, 0xFFFFFF, 0);
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.inactive"), 5, 0, 0xBBBBBB, 1);
+
+                        RenderUtils.drawLineOffsetStringOnHUD(I18n.format("string.simplemobradar.mob"), 5, 0, 0xFFFFFF, 3);
+                        RenderUtils.drawLineOffsetStringOnHUD(ItemUtils.getPassiveName(stack), 5, 0, 0xFFFF00, 4);
+                        break;
+                    }
+                }
+            }
         }
     }
 
+    public static final KeyBinding SCROLL_CATALYST = new KeyBinding("key." + Reference.MOD_ID + ".scroll", KeyConflictContext.IN_GAME, KeyModifier.NONE, Keyboard.KEY_LSHIFT, Reference.NAME);
 
-        public static final KeyBinding SCROLL_CATALYST = new KeyBinding("key." + Reference.MOD_ID + ".scroll", KeyConflictContext.IN_GAME, KeyModifier.NONE, Keyboard.KEY_LSHIFT, Reference.NAME);
+    static {
+        ClientRegistry.registerKeyBinding(SCROLL_CATALYST);
+    }
 
-        static {
-            ClientRegistry.registerKeyBinding(SCROLL_CATALYST);
-        }
     @SubscribeEvent
     public static void onMouseInput(MouseEvent event) {
         if (Minecraft.getMinecraft().currentScreen == null) {
             EntityPlayer player = Minecraft.getMinecraft().player;
             ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
-            if (event.getDwheel() != 0 && SCROLL_CATALYST.isKeyDown() && held.getItem() instanceof ItemSimpleMobRadar) {
+            if (event.getDwheel() != 0 && SCROLL_CATALYST.isKeyDown() && (held.getItem() instanceof ItemSimpleMobRadar || held.getItem() instanceof ItemSimplePassiveRadar)) {
                 MainClass.NETWORK_WRAPPER.sendToServer(new NetworkHandler(event.getDwheel() > 0));
                 event.setCanceled(true);
             }

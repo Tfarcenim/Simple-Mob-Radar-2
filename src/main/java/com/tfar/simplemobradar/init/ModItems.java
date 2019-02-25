@@ -2,6 +2,7 @@ package com.tfar.simplemobradar.init;
 
 import com.tfar.simplemobradar.items.ItemSimpleMobRadar;
 import com.tfar.simplemobradar.items.ItemSimplePassiveRadar;
+
 import net.minecraft.item.Item;
 
 import java.util.ArrayList;

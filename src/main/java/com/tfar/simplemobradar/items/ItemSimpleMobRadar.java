@@ -21,18 +21,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.lwjgl.input.Mouse;
 
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.io.IOException;
 import java.util.List;
 
 public class ItemSimpleMobRadar extends Item implements IHasModel {
     public ItemSimpleMobRadar(String name) {
         this.setTranslationKey(name);
         this.setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
-        this.setCreativeTab(CreativeTabs.MISC);
+        this.setCreativeTab(CreativeTabs.TOOLS);
         ModItems.ITEMS.add(this);
     }
 
@@ -52,7 +48,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
             if (entityList != null && entityList.size() > 0) {
                 player.getHeldItem(hand).getTagCompound().setInteger("State", 1);
                 getClosestMobs(player, hand);
-                //((EntityLivingBase) entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));
             } else {
                 player.getHeldItem(hand).getTagCompound().setInteger("State", 0);
             }
@@ -75,16 +70,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         return Worldin.getEntitiesWithinAABB(Reference.mob_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(x - r, y - r, z - r, x + r, y + r, z + r));
     }
 
-    public void changeTargetMob(ItemStack stack) {
-        stack.getTagCompound().setInteger("State", 2);
-        int temp = stack.getTagCompound().getInteger("mob type");
-        if ((temp + 1) >= Reference.valid_mobs.size()) {
-            stack.getTagCompound().setInteger("mob type", 0);
-        } else {
-            stack.getTagCompound().setInteger("mob type", temp + 1);
-        }
-    }
-
     public void getClosestMobs(EntityPlayer player, EnumHand hand) {
         List<Entity> entities = entityList;
         int closest_mob = 0;
@@ -98,7 +83,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
                 closest_mob = i;
             }
         }
-
         player.getHeldItem(hand).getTagCompound().setDouble("X position", entities.get(closest_mob).posX);
         player.getHeldItem(hand).getTagCompound().setDouble("Y position", entities.get(closest_mob).posY);
         player.getHeldItem(hand).getTagCompound().setDouble("Z position", entities.get(closest_mob).posZ);

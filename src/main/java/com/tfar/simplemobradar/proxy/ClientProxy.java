@@ -11,25 +11,27 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
-public class ClientProxy extends CommonProxy{public void registerItemRenderer(Item item, int meta, String id) {
-    ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));}
-
+public class ClientProxy extends CommonProxy {
+    public void registerItemRenderer(Item item, int meta, String id) {
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
+    }
 
     @Override
     public void registerEvents() {
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
     }
 
-
     @Override
-    public void postInit(FMLPostInitializationEvent event)
-    {
+    public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
 
-    EventConfigChanged eventConfigChanged = new EventConfigChanged();
-    MinecraftForge.EVENT_BUS.register(eventConfigChanged);
-}    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
-    {
-        if (event.getModID().equals(Reference.MOD_ID)){MainClass.proxy.onConfigChanged(event);}
+        EventConfigChanged eventConfigChanged = new EventConfigChanged();
+        MinecraftForge.EVENT_BUS.register(eventConfigChanged);
+    }
+
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(Reference.MOD_ID)) {
+            MainClass.proxy.onConfigChanged(event);
+        }
     }
 }

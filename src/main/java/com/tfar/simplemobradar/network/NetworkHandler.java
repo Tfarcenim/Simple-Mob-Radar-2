@@ -15,9 +15,7 @@ public class NetworkHandler implements IMessage {
 
     public boolean increment;
 
-    public NetworkHandler() {
-
-    }
+    public NetworkHandler(){}
 
     public NetworkHandler(boolean increment) {
         this.increment = increment;
@@ -39,7 +37,7 @@ public class NetworkHandler implements IMessage {
             FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
 
                 ItemStack stack = ctx.getServerHandler().player.getHeldItemMainhand();
-                if ((stack.getItem() instanceof ItemSimpleMobRadar)||(stack.getItem() instanceof ItemSimplePassiveRadar)) {
+                if (stack.getItem() instanceof ItemSimpleMobRadar) {
                     int type = stack.getTagCompound().getInteger("mob type");
                     stack.getTagCompound().setInteger("State", 2);
                     stack.getTagCompound().setInteger("mob type",MathHelper.clamp(type + (message.increment ? -1 : 1), 0, Reference.mobs.size()-1));
@@ -48,6 +46,16 @@ public class NetworkHandler implements IMessage {
                             stack.getTagCompound().setInteger("mob type",Reference.mobs.size()-1);
                         else if (stack.getTagCompound().getInteger("mob type") >= Reference.mobs.size()-1)
                             stack.getTagCompound().setInteger("mob type",0);
+                }
+                if (stack.getItem() instanceof ItemSimplePassiveRadar) {
+                    int type = stack.getTagCompound().getInteger("mob type");
+                    stack.getTagCompound().setInteger("State", 2);
+                    stack.getTagCompound().setInteger("mob type",MathHelper.clamp(type + (message.increment ? -1 : 1), 0, Reference.animals.size()-1));
+
+                    if (stack.getTagCompound().getInteger("mob type") == 0)
+                        stack.getTagCompound().setInteger("mob type",Reference.animals.size()-1);
+                    else if (stack.getTagCompound().getInteger("mob type") >= Reference.animals.size()-1)
+                        stack.getTagCompound().setInteger("mob type",0);
                 }
             });
             return null;

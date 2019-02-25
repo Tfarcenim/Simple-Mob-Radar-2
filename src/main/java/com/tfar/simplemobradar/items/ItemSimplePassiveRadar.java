@@ -5,6 +5,7 @@ import com.tfar.simplemobradar.config.ConfigHandler;
 import com.tfar.simplemobradar.init.ModItems;
 import com.tfar.simplemobradar.util.IHasModel;
 import com.tfar.simplemobradar.util.Reference;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,137 +21,85 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_ELEVATION;
-import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_TOTAL_MOBS;
-import static java.lang.Math.round;
-
-public class ItemSimplePassiveRadar extends Item implements IHasModel{
+public class ItemSimplePassiveRadar extends Item implements IHasModel {
     public ItemSimplePassiveRadar(String name) {
         this.setTranslationKey(name);
         this.setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
-        this.setCreativeTab(CreativeTabs.MISC);
-        ModItems.ITEMS.add(this);    }
+        this.setCreativeTab(CreativeTabs.TOOLS);
+        ModItems.ITEMS.add(this);
+    }
 
     private static int r = ConfigHandler.RANGE_ANIMALS;
     private List<Entity> entityList;
-    private int saved_mob;
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
-        if (player.getHeldItem(hand).getTagCompound() == null){writeToNBT(player.getHeldItem(hand));}
         BlockPos pos = player.getPosition();
-        if (player.isSneaking()) {
-            if (!world.isRemote) {
-            changeMobTarget(player.getHeldItem(hand));
-                player.getCooldownTracker().setCooldown(this, 5);
-                player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + " " + Reference.animals.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))), true);
-                return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
-        } else if (!world.isRemote){player.getCooldownTracker().setCooldown(this, 20);
+
+        if (!world.isRemote && !player.isSneaking()) {
+            player.getCooldownTracker().setCooldown(this, 20);
 
             entityList = getMobList(world, pos, player, hand);
+            player.getHeldItem(hand).getTagCompound().setInteger("Size", entityList.size());
             if (entityList != null && entityList.size() > 0) {
-                saved_mob = getClosestMobToPlayer(pos.getX(), pos.getY(), pos.getZ(), player, hand);
-                ((EntityLivingBase)entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));}
-
-            return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));}
+                player.getHeldItem(hand).getTagCompound().setInteger("State", 1);
+                getClosestMobs(player, hand);
+            } else {
+                player.getHeldItem(hand).getTagCompound().setInteger("State", 0);
+            }
+            return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
+        }
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
+
     @Override
-    public int getMaxItemUseDuration(ItemStack stack) {return 720000;}
+    public int getMaxItemUseDuration(ItemStack stack) {
+        return 720000;
+    }
 
     public List<Entity> getMobList(World Worldin, BlockPos pos, EntityPlayer player, EnumHand hand) {
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
 
-        int i = pos.getX();
-        int j = pos.getY();
-        int k = pos.getZ();
+        return Worldin.getEntitiesWithinAABB(Reference.animal_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(x - r, y - r, z - r, x + r, y + r, z + r));
+    }
 
-        List<Entity> entities = Worldin.getEntitiesWithinAABB(Reference.animal_class.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")), new AxisAlignedBB(i - r, j - r, k - r, i + r, j + r, k + r));
-        if (entities.size() > 0) {if (DISPLAY_TOTAL_MOBS) {
-            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Found: " + entities.size() + " " + Reference.animals.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))));
-        }
-        } else {
-            player.sendMessage(new TextComponentString(TextFormatting.RED + "No " + Reference.animals.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type")) + " found"));
-        }
-        return entities;
-    }
-    public void changeMobTarget(ItemStack stack) {
-        int temp = stack.getTagCompound().getInteger("mob type");
-        if ((temp+1)>=Reference.valid_animals.size()){stack.getTagCompound().setInteger("mob type", 0);}
-            else{stack.getTagCompound().setInteger("mob type", temp+1);}
-    }
-    public int getClosestMobToPlayer(double x, double y, double z, EntityPlayer player, EnumHand hand) {
+    public void getClosestMobs(EntityPlayer player, EnumHand hand) {
         List<Entity> entities = entityList;
         int closest_mob = 0;
-        int direction;
         double distance;
         double closest = 2000000000;
         for (int i = 0; i < entities.size(); i++) {
-            distance = Math.sqrt(Math.pow(entities.get(i).posX - x, 2) + Math.pow(entities.get(i).posY - y, 2) + Math.pow(entities.get(i).posZ - z, 2));
+            ((EntityLivingBase) entityList.get(i)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));
+            distance = player.getDistance(entities.get(i).posX, entities.get(i).posY, entities.get(i).posZ);
             if (distance < closest) {
                 closest = distance;
                 closest_mob = i;
             }
         }
-        double angle = (Math.atan2(x - entities.get(closest_mob).posX, entities.get(closest_mob).posZ - z) * 180 / Math.PI) + 180;
-        direction = (int) (Math.floor(angle / 45 + .5));
-        String compass = "NORTH";
-        switch (direction) {
-            case 6: {
-                compass = "WEST";
-                break;
-            }
-            case 7: {
-                compass = "NORTH-WEST";
-                break;
-            }
-            case 8: {
-                compass = "NORTH";
-                break;
-            }
-            case 0: {
-                compass = "NORTH";
-                break;
-            }
-            case 1: {
-                compass = "NORTH-EAST";
-                break;
-            }
-            case 2: {
-                compass = "EAST";
-                break;
-            }
-            case 3: {
-                compass = "SOUTH-EAST";
-                break;
-            }
-            case 4: {
-                compass = "SOUTH";
-                break;
-            }
-            case 5: {
-                compass = "SOUTH-WEST";
-                break;
-            }
-        }
-        if (DISPLAY_TOTAL_MOBS)player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest is " + round(closest) + " blocks away in the " + compass + " direction"));
-        else player.sendMessage(new TextComponentString(TextFormatting.AQUA + "Nearest "+ Reference.animals.get(player.getHeldItem(hand).getTagCompound().getInteger("mob type"))+" is " + round(closest) + " blocks away in the " + compass + " direction"));
-
-        if (DISPLAY_ELEVATION)player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Elevation Difference: " + round(entities.get(closest_mob).posY - y)));
-        return closest_mob;
+        player.getHeldItem(hand).getTagCompound().setDouble("X position", entities.get(closest_mob).posX);
+        player.getHeldItem(hand).getTagCompound().setDouble("Y position", entities.get(closest_mob).posY);
+        player.getHeldItem(hand).getTagCompound().setDouble("Z position", entities.get(closest_mob).posZ);
     }
+
     @Override
     public void registerModels() {
-        MainClass.proxy.registerItemRenderer(this,0,"inventory");
+        MainClass.proxy.registerItemRenderer(this, 0, "inventory");
     }
-    public void writeToNBT(ItemStack stack){
+
+    public static void writeToNBT(ItemStack stack) {
         stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setInteger("mob type",0);
+        stack.getTagCompound().setInteger("mob type", 0);
+        stack.getTagCompound().setInteger("State", 2);
+    }
+
+    public int getState(ItemStack stack) {
+        return stack.getTagCompound().getInteger("State");
     }
 }
