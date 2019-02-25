@@ -1,6 +1,7 @@
 package com.tfar.simplemobradar.proxy;
 
 import com.tfar.simplemobradar.MainClass;
+import com.tfar.simplemobradar.client.ClientEventHandler;
 import com.tfar.simplemobradar.config.EventConfigChanged;
 import com.tfar.simplemobradar.util.Reference;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -12,6 +13,13 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 public class ClientProxy extends CommonProxy{public void registerItemRenderer(Item item, int meta, String id) {
     ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));}
+
+
+    @Override
+    public void registerEvents() {
+        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+    }
+
 
     @Override
     public void postInit(FMLPostInitializationEvent event)

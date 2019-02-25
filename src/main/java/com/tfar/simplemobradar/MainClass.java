@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -22,6 +23,11 @@ public class MainClass {
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
     public static CommonProxy proxy;
     public static Logger logger = LogManager.getLogger("simplemobradar");
+
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        proxy.registerEvents();
+    }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
