@@ -21,7 +21,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.lwjgl.input.Mouse;
 
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.io.IOException;
 import java.util.List;
 
 public class ItemSimpleMobRadar extends Item implements IHasModel {
@@ -38,17 +42,9 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
-        if (player.getHeldItem(hand).getTagCompound() == null) {
-            writeToNBT(player.getHeldItem(hand));
-        }
         BlockPos pos = player.getPosition();
-        if (player.isSneaking()) {
-            if (!world.isRemote) {
-                changeTargetMob(player.getHeldItem(hand));
-                player.getCooldownTracker().setCooldown(this, 7);
-                return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
-            }
-        } else if (!world.isRemote) {
+
+        if (!world.isRemote && !player.isSneaking()) {
             player.getCooldownTracker().setCooldown(this, 20);
 
             entityList = getMobList(world, pos, player, hand);
@@ -60,7 +56,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
             } else {
                 player.getHeldItem(hand).getTagCompound().setInteger("State", 0);
             }
-
             return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
         }
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
