@@ -16,7 +16,7 @@ public class ConfigHandler {
     @Config.Name("Display mob distance?")
     public static boolean DISPLAY_DISTANCE = false;
     @Config.Name("Display with chat open?")
-    public static boolean displayWithChatOpen = true;
+    public static boolean DISPLAY_WITH_CHAT_OPEN = true;
     @Config.Name("offset")
     public static int lineOffset= 1;
 }

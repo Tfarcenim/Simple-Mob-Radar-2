@@ -1,6 +1,5 @@
 package com.tfar.simplemobradar.client;
 
-import com.tfar.simplemobradar.MainClass;
 import com.tfar.simplemobradar.config.ConfigHandler;
 import com.tfar.simplemobradar.items.ItemSimpleMobRadar;
 import com.tfar.simplemobradar.util.ItemUtils;
@@ -21,7 +20,7 @@ public class ClientEventHandler {
 
     public void onRenderTick(TickEvent.RenderTickEvent event) {
 
-        if (event.phase == TickEvent.Phase.END && mc.player != null && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo && (mc.currentScreen == null || (ConfigHandler.displayWithChatOpen && mc.currentScreen instanceof GuiChat))) {
+        if (event.phase == TickEvent.Phase.END && mc.player != null && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo && (mc.currentScreen == null || (ConfigHandler.DISPLAY_WITH_CHAT_OPEN && mc.currentScreen instanceof GuiChat))) {
             final EntityPlayer player = mc.player;
             final ItemStack stack = ItemUtils.getHeldRadar(player);
             if (stack.getItem() instanceof ItemSimpleMobRadar) {

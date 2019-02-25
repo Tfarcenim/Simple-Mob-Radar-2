@@ -35,9 +35,8 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         ModItems.ITEMS.add(this);
     }
 
-    private static int r = ConfigHandler.RANGE_ANIMALS;
+    private static int r = ConfigHandler.RANGE_MOBS;
     private List<Entity> entityList;
-    private int saved_mob;
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
@@ -58,7 +57,7 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
             entityList = getMobList(world, pos, player, hand);
             if (entityList != null && entityList.size() > 0) {
                 player.getHeldItem(hand).getTagCompound().setInteger("State", 1);
-                saved_mob = getClosestMobs(pos.getX(), pos.getY(), pos.getZ(), player, hand);
+                int saved_mob = getClosestMobs(pos.getX(), pos.getY(), pos.getZ(), player, hand);
                 ((EntityLivingBase) entityList.get(saved_mob)).addPotionEffect(new PotionEffect(MobEffects.GLOWING, 400, 1));
             } else {
                 player.getHeldItem(hand).getTagCompound().setInteger("State", 0);
@@ -115,12 +114,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         player.getHeldItem(hand).getTagCompound().setDouble("X position", entities.get(closest_mob).posX);
         player.getHeldItem(hand).getTagCompound().setDouble("Y position", entities.get(closest_mob).posY);
         player.getHeldItem(hand).getTagCompound().setDouble("Z position", entities.get(closest_mob).posZ);
-
-        if (DISPLAY_ELEVATION)
-            player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Elevation Difference: " + round(entities.get(closest_mob).posY - y)));
-
-
-
         return closest_mob;
     }
 
