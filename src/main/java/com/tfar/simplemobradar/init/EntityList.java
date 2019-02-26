@@ -26,14 +26,14 @@ public class EntityList {
             if (IMob.class.isAssignableFrom(e.getEntityClass())) {
                 valid_mobs.add(e);
                 mob_class.add(e.getEntityClass());
-                mobs.add(I18n.format("entity." + e.getName() + ".name"));
+                mobs.add(e.getName());
             }
         //add passives
         for (EntityEntry e : ForgeRegistries.ENTITIES)
             if (EntityAnimal.class.isAssignableFrom(e.getEntityClass())) {
                 valid_animals.add(e);
                 animal_class.add(e.getEntityClass());
-                animals.add(I18n.format("entity." + e.getName() + ".name"));
+                animals.add(e.getName());
             }
         Map<String, Class<? extends Entity>> sortmobs = new HashMap<>();
         Map<String, Class<? extends Entity>> sortanimals = new HashMap<>();
