@@ -5,7 +5,6 @@ import com.tfar.simplemobradar.items.ItemSimplePassiveRadar;
 import com.tfar.simplemobradar.util.Reference;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
