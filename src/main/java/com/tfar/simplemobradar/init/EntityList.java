@@ -12,24 +12,15 @@ public class EntityList {
         for (EntityEntry e : ForgeRegistries.ENTITIES)
             if (IMob.class.isAssignableFrom(e.getEntityClass())) {
                 Reference.valid_mobs.add(e);
+                Reference.mob_class.add(e.getEntityClass());
+                Reference.mobs.add(e.getName());
             }
-        for (EntityEntry mob : Reference.valid_mobs) {
-            Reference.mob_class.add(mob.getEntityClass());
-        }
-
-        for (EntityEntry mob : Reference.valid_mobs) {
-            Reference.mobs.add(mob.getName());
-        }
         //add passives
         for (EntityEntry e : ForgeRegistries.ENTITIES)
             if (EntityAnimal.class.isAssignableFrom(e.getEntityClass())) {
                 Reference.valid_animals.add(e);
+                Reference.animal_class.add(e.getEntityClass());
+                Reference.animals.add(e.getName());
             }
-        for (EntityEntry mob : Reference.valid_animals) {
-            Reference.animal_class.add(mob.getEntityClass());
-        }
-        for (EntityEntry mob : Reference.valid_animals) {
-            Reference.animals.add(mob.getName());
-        }
     }
 }
