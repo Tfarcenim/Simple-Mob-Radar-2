@@ -1,9 +1,13 @@
 package com.tfar.simplemobradar.init;
 
+import cofh.thermalfoundation.entity.monster.EntityBasalz;
+import cofh.thermalfoundation.entity.monster.EntityBlitz;
+import cofh.thermalfoundation.entity.monster.EntityBlizz;
 import com.tfar.simplemobradar.util.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -33,27 +37,47 @@ public class EntityList {
                 animal_class.add(e.getEntityClass());
                 animals.add(e.getName());
             }
-        Map<String,Class<? extends Entity>> sortmobs= new HashMap<>();
-        Map<String,Class<? extends Entity>> sortanimals= new HashMap<>();
+        Map<String, Class<? extends Entity>> sortmobs = new HashMap<>();
+        Map<String, Class<? extends Entity>> sortanimals = new HashMap<>();
 
-        for(int i=0;i<valid_mobs.size();i++){
-                sortmobs.put(mobs.get(i),mob_class.get(i));}
-        for(int i=0;i<valid_animals.size();i++){
-            sortanimals.put(animals.get(i),animal_class.get(i));}
+        for (int i = 0; i < valid_mobs.size(); i++) {
+            sortmobs.put(mobs.get(i), mob_class.get(i));
+        }
+        for (int i = 0; i < valid_animals.size(); i++) {
+            sortanimals.put(animals.get(i), animal_class.get(i));
+        }
+        //because thermal foundation names their mobs badly and it looks bad
+        if(Loader.isModLoaded("thermalfoundation")) {
+            Map<String, Class<? extends Entity>> addgoodnames = new HashMap<>();
+
+            addgoodnames.put("Blizz", EntityBlizz.class);
+            addgoodnames.put("Blitz", EntityBlitz.class);
+            addgoodnames.put("Basalz", EntityBasalz.class);
+
+            sortmobs.remove("thermalfoundation.blizz");
+            sortmobs.remove("thermalfoundation.blitz");
+            sortmobs.remove("thermalfoundation.basalz");
+
+            sortmobs.putAll(addgoodnames);
+        }
 
         //sort the HashMap by sticking it in a TreeMap
-        TreeMap<String,Class<? extends Entity>> sortedmobs = new TreeMap<>(sortmobs);
-        TreeMap<String,Class<? extends Entity>> sortedanimals = new TreeMap<>(sortanimals);
+        TreeMap<String, Class<? extends Entity>> sortedmobs = new TreeMap<>(sortmobs);
+        TreeMap<String, Class<? extends Entity>> sortedanimals = new TreeMap<>(sortanimals);
 
         //construct a new list that is sorted
-        for (Map.Entry<String,Class<? extends Entity>> entry : sortedmobs.entrySet()){
+        for (Map.Entry<String, Class<? extends Entity>> entry : sortedmobs.entrySet()) {
             Reference.sorted_mobs.add(entry.getKey());
             Reference.sorted_mob_class.add(entry.getValue());
         }
 
-        for (Map.Entry<String,Class<? extends Entity>> entry : sortedanimals.entrySet()){
+        for (Map.Entry<String, Class<? extends Entity>> entry : sortedanimals.entrySet()) {
             Reference.sorted_animals.add(entry.getKey());
             Reference.sorted_animal_class.add(entry.getValue());
         }
     }
-}
+
+    public static void hardcodeMobNames(int size, Map<String, Class<? extends Entity>> mobs) {
+
+            }
+        }

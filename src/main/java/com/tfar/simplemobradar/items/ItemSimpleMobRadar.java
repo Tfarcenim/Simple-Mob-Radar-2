@@ -53,6 +53,7 @@ if (player.getHeldItem(hand).getTagCompound()==null)writeToNBT(player.getHeldIte
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
 
+
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
         return 720000;

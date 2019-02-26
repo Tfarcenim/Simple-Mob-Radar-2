@@ -32,13 +32,20 @@ minecraft {
     mappings = "stable_39"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
-
+repositories {
+    maven { url "http://maven.covers1624.net/" }
+    //maven { url "http://chickenbones.net/maven/" }
+    maven { url "http://dvs1.progwml6.com/files/maven/" }
+}
 dependencies {
+    deobfCompile "cofh:CoFHCore:${mc_version}+:universal@jar"
+    //compile "codechicken:CodeChickenLib:${mc_version}+:universal@jar"
+    //deobfCompile "cofh:ThermalFoundation:${mc_version}+:universal@jar"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-      
+
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
