@@ -38,7 +38,7 @@ public class NetworkHandler implements IMessage {
 
                 ItemStack stack = ctx.getServerHandler().player.getHeldItemMainhand();
                 if (stack.getItem() instanceof ItemSimpleMobRadar) {
-                    if (stack.getTagCompound()==null) ItemSimpleMobRadar.writeToNBT(stack);
+                    if (stack.getTagCompound()==null) ItemSimpleMobRadar.resetNBT(stack);
                         int type = stack.getTagCompound().getInteger("mobtype");
                     stack.getTagCompound().setInteger("State", 2);
                     stack.getTagCompound().setInteger("mobtype",MathHelper.clamp(type + (message.increment ? -1 : 1), 0, Reference.sorted_mobs.size()-1));
@@ -48,7 +48,7 @@ public class NetworkHandler implements IMessage {
                             stack.getTagCompound().setInteger("mobtype",0);
                 }
                 if (stack.getItem() instanceof ItemSimplePassiveRadar) {
-                    if (stack.getTagCompound()==null) ItemSimplePassiveRadar.writeToNBT(stack);
+                    if (stack.getTagCompound()==null) ItemSimplePassiveRadar.resetNBT(stack);
                     int type = stack.getTagCompound().getInteger("mobtype");
                     stack.getTagCompound().setInteger("State", 2);
                     stack.getTagCompound().setInteger("mobtype",MathHelper.clamp(type + (message.increment ? -1 : 1), 0, Reference.sorted_animals.size()-1));

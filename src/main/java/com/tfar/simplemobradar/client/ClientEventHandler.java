@@ -44,7 +44,8 @@ public class ClientEventHandler {
             final ItemStack stack = ItemUtils.getHeldRadar(player);
 
             if (stack.getItem() instanceof ItemSimpleMobRadar) {
-                if (stack.getTagCompound() == null) ItemSimpleMobRadar.writeToNBT(stack);
+                if (stack.getTagCompound() == null) ItemSimpleMobRadar.resetNBT(stack);
+                if (stack.getTagCompound().getInteger("mobtype")>=Reference.sorted_mobs.size())stack.getTagCompound().setInteger("mobtype",0);
                 final ItemSimpleMobRadar radar = (ItemSimpleMobRadar) stack.getItem();
 
                 switch (radar.getState(stack)) {
@@ -87,7 +88,8 @@ public class ClientEventHandler {
             }
 
             if (stack.getItem() instanceof ItemSimplePassiveRadar) {
-                if (stack.getTagCompound() == null) ItemSimplePassiveRadar.writeToNBT(stack);
+                if (stack.getTagCompound() == null) ItemSimplePassiveRadar.resetNBT(stack);
+                if (stack.getTagCompound().getInteger("mobtype")>=Reference.sorted_mobs.size())stack.getTagCompound().setInteger("mobtype",0);
                 final ItemSimplePassiveRadar radar = (ItemSimplePassiveRadar) stack.getItem();
 
                 switch (radar.getState(stack)) {

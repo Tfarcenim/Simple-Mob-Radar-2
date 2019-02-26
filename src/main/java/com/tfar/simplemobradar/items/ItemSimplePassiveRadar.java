@@ -88,7 +88,7 @@ public class ItemSimplePassiveRadar extends Item implements IHasModel {
         MainClass.proxy.registerItemRenderer(this, 0, "inventory");
     }
 
-    public static void writeToNBT(ItemStack stack) {
+    public static void resetNBT(ItemStack stack) {
         stack.setTagCompound(new NBTTagCompound());
         stack.getTagCompound().setInteger("mobtype", 0);
         stack.getTagCompound().setInteger("State", 2);

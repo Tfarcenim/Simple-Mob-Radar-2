@@ -1,15 +1,11 @@
 package com.tfar.simplemobradar.init;
 
-import cofh.thermalfoundation.entity.monster.EntityBasalz;
-import cofh.thermalfoundation.entity.monster.EntityBlitz;
-import cofh.thermalfoundation.entity.monster.EntityBlizz;
-import com.tfar.simplemobradar.MainClass;
 import com.tfar.simplemobradar.util.Reference;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -64,8 +60,4 @@ public class EntityList {
             Reference.sorted_animal_class.add(entry.getValue());
         }
     }
-
-    public static void hardcodeMobNames(int size, Map<String, Class<? extends Entity>> mobs) {
-
-            }
-        }
+}
