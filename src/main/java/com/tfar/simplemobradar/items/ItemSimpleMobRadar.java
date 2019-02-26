@@ -53,7 +53,6 @@ public class ItemSimpleMobRadar extends Item implements IHasModel {
         return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
 
-
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
         return 720000;
