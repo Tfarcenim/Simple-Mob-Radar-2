@@ -24,4 +24,16 @@ public class ItemUtils {
     public static int getTotal(ItemStack stack){
         return  stack.getTagCompound().getInteger("Size");
     }
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -3,7 +3,9 @@ package com.tfar.simplemobradar.init;
 import cofh.thermalfoundation.entity.monster.EntityBasalz;
 import cofh.thermalfoundation.entity.monster.EntityBlitz;
 import cofh.thermalfoundation.entity.monster.EntityBlizz;
+import com.tfar.simplemobradar.MainClass;
 import com.tfar.simplemobradar.util.Reference;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -28,14 +30,14 @@ public class EntityList {
             if (IMob.class.isAssignableFrom(e.getEntityClass())) {
                 valid_mobs.add(e);
                 mob_class.add(e.getEntityClass());
-                mobs.add(e.getName());
+                mobs.add(I18n.format("entity." + e.getName() + ".name"));
             }
         //add passives
         for (EntityEntry e : ForgeRegistries.ENTITIES)
             if (EntityAnimal.class.isAssignableFrom(e.getEntityClass())) {
                 valid_animals.add(e);
                 animal_class.add(e.getEntityClass());
-                animals.add(e.getName());
+                animals.add(I18n.format("entity." + e.getName() + ".name"));
             }
         Map<String, Class<? extends Entity>> sortmobs = new HashMap<>();
         Map<String, Class<? extends Entity>> sortanimals = new HashMap<>();
@@ -45,20 +47,6 @@ public class EntityList {
         }
         for (int i = 0; i < valid_animals.size(); i++) {
             sortanimals.put(animals.get(i), animal_class.get(i));
-        }
-        //because thermal foundation names their mobs badly and it looks bad
-        if(Loader.isModLoaded("thermalfoundation")) {
-            Map<String, Class<? extends Entity>> addgoodnames = new HashMap<>();
-
-            addgoodnames.put("Blizz", EntityBlizz.class);
-            addgoodnames.put("Blitz", EntityBlitz.class);
-            addgoodnames.put("Basalz", EntityBasalz.class);
-
-            sortmobs.remove("thermalfoundation.blizz");
-            sortmobs.remove("thermalfoundation.blitz");
-            sortmobs.remove("thermalfoundation.basalz");
-
-            sortmobs.putAll(addgoodnames);
         }
 
         //sort the HashMap by sticking it in a TreeMap
