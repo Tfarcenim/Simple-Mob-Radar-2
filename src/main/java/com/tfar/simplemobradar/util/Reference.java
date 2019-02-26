@@ -1,6 +1,7 @@
 package com.tfar.simplemobradar.util;
 
 import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,12 @@ public class Reference {
         public static final String CLIENT_PROXY_CLASS = "com.tfar.simplemobradar.proxy.ClientProxy";
         public static final String COMMON_PROXY_CLASS = "com.tfar.simplemobradar.proxy.CommonProxy";
 
-        public static List<String> sorted_mobs = new ArrayList<>();
-        public static List<Class<? extends Entity>> sorted_mob_class = new ArrayList<>();
+        //public static List<String> sorted_mobs = new ArrayList<>();
+        //public static List<Class<? extends Entity>> sorted_mob_class = new ArrayList<>();
 
-        public static List<String> sorted_animals = new ArrayList<>();
-        public static List<Class<? extends Entity>> sorted_animal_class = new ArrayList<>();
+        //public static List<String> sorted_animals = new ArrayList<>();
+        //public static List<Class<? extends Entity>> sorted_animal_class = new ArrayList<>();
+
+        public static List<EntityEntry> mobs = new ArrayList<>();
+        public static List<EntityEntry> animals = new ArrayList<>();
 }

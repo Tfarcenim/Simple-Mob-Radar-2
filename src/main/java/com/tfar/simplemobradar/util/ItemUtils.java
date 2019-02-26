@@ -11,11 +11,11 @@ public class ItemUtils {
     }
 
     public static String getMobName(ItemStack stack){
-        return I18n.format("entity." + Reference.sorted_mobs.get(stack.getTagCompound().getInteger("mobtype"))+ ".name");
+        return I18n.format("entity." + Reference.mobs.get(stack.getTagCompound().getInteger("mobtype")).getName()+ ".name");
     }
 
     public static String getPassiveName(ItemStack stack){
-        return I18n.format("entity." + Reference.sorted_animals.get(stack.getTagCompound().getInteger("mobtype"))+ ".name");
+        return I18n.format("entity." + Reference.animals.get(stack.getTagCompound().getInteger("mobtype")).getName()+ ".name");
     }
 
     public static int getDistance(EntityPlayer player, ItemStack stack){
