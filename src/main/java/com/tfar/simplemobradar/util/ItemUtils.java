@@ -10,11 +10,11 @@ public class ItemUtils {
     }
 
     public static String getMobName(ItemStack stack){
-        return Reference.mobs.get(stack.getTagCompound().getInteger("mobtype"));
+        return Reference.sorted_mobs.get(stack.getTagCompound().getInteger("mobtype"));
     }
 
     public static String getPassiveName(ItemStack stack){
-        return Reference.animals.get(stack.getTagCompound().getInteger("mobtype"));
+        return Reference.sorted_animals.get(stack.getTagCompound().getInteger("mobtype"));
     }
 
     public static int getDistance(EntityPlayer player, ItemStack stack){
