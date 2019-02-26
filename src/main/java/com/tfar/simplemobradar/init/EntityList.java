@@ -22,19 +22,19 @@ public class EntityList {
         List<Class<? extends Entity>> animal_class = new ArrayList<>();
 
         //add hostiles
-        for (EntityEntry e : ForgeRegistries.ENTITIES)
+        for (EntityEntry e : ForgeRegistries.ENTITIES) {
             if (IMob.class.isAssignableFrom(e.getEntityClass())) {
                 valid_mobs.add(e);
                 mob_class.add(e.getEntityClass());
                 mobs.add(e.getName());
             }
-        //add passives
-        for (EntityEntry e : ForgeRegistries.ENTITIES)
+            //add passives
             if (EntityAnimal.class.isAssignableFrom(e.getEntityClass())) {
                 valid_animals.add(e);
                 animal_class.add(e.getEntityClass());
                 animals.add(e.getName());
             }
+        }
         Map<String, Class<? extends Entity>> sortmobs = new HashMap<>();
         Map<String, Class<? extends Entity>> sortanimals = new HashMap<>();
 
