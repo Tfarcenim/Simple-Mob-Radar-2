@@ -32,10 +32,8 @@ public class MainClass {
     public void init(FMLInitializationEvent event) {
         NETWORK_WRAPPER.registerMessage(NetworkHandler.Handler.class, NetworkHandler.class, 0, Side.SERVER);
 
-
         EntityList.init2();
-
     }
-    }
+}
 
 

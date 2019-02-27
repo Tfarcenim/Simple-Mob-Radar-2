@@ -29,6 +29,7 @@ import org.lwjgl.input.Keyboard;
 
 import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_DISTANCE;
 import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_TOTAL_MOBS;
+import static com.tfar.simplemobradar.config.ConfigHandler.DISPLAY_WITH_CHAT_OPEN;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Reference.MOD_ID)
 
@@ -39,7 +40,7 @@ public class ClientEventHandler {
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event) {
 
-        if (event.phase == TickEvent.Phase.END && mc.player != null && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo && (mc.currentScreen == null || (ConfigHandler.DISPLAY_WITH_CHAT_OPEN && mc.currentScreen instanceof GuiChat))) {
+        if (event.phase == TickEvent.Phase.END && mc.player != null && !mc.gameSettings.hideGUI && !mc.gameSettings.showDebugInfo && (mc.currentScreen == null || (DISPLAY_WITH_CHAT_OPEN && mc.currentScreen instanceof GuiChat))) {
             final EntityPlayer player = mc.player;
             final ItemStack stack = ItemUtils.getHeldRadar(player);
 
